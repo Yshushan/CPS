@@ -1,0 +1,562 @@
+% $ based on Id: sample_english-v1.2.tex,v 1.2 2007/04/12 21:05:22 zlb Exp $
+% $Id: sample_english.tex 6 2011-01-24 13:13:33Z hsqi $
+
+\documentclass[english]{cccconf}
+%\documentclass[usemulticol,english]{cccconf}
+\usepackage[comma,numbers,square,sort&compress]{natbib}
+\usepackage{amsmath}
+\allowdisplaybreaks[4]
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{bm}
+%\usepackage{cite}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem} 
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\begin{document}
+
+\title{Finite Time Attack Detection for a class of singular Cyber-Physical Systems with Adversarial Attacks}
+\author{Shushan Yang,\ Yongduan Song}
+       
+
+% Note: the first argument in the \affiliation command is optional.
+% It defines a label for the affiliation which can be used in the \aref
+% command. If there is only one affiliation for all authors, then the
+% optional argument in the \affiliation command should be suppressed,
+% and the \aref command should aslo be removed after each author in
+% \author command, in this case the affiliation will not be numbered.
+
+% ��ע�⣺\affiliation�����ĵ�һ�������ǿ�ѡ�ģ�������������\aref�����ı�ǩ��
+% ������������ֻ��һ����λ���벻Ҫʹ��\affiliation�����Ŀ�ѡ������ͬʱ������
+% ��\author�����е�ÿλ������������Ҳ����ʹ��\aref���ʾ������
+% \author{First Author, Second Author, Third Author}
+% \affiliation{Chinese Academy of Sciences, Beijing 100190, P.~R.~China\email{ccc@amss.ac.cn}}
+% ��ʱ��λǰ���������ֱ��ţ�������������Ҳû�б���
+
+%\affiliation[amss]{Academy of Mathematics and Systems Science,
+%        Chinese Academy of Sciences, Beijing 100190, P.~R.~China
+%        \email{ccc@amss.ac.cn}}
+%\affiliation[hit]{Harbin Institute of Technology, Harbin 150001, P.~R.~China
+%        \email{xxx@hit.edu.cn}}
+
+\maketitle
+
+\begin{abstract}
+This paper addresses the problem of finite time attack detection for cyber-physical systems. A given finite time state observer based on two infinite time functional observer, a state modifier and an attack event trigger are proposed  to construct a novel attack detector for a class of linear discrete time cyber-physical systems with singularity, and a sufficient condition to guarantee the existence of such a detector is established.  
+Theoretical analysis shows that, an attack event alarm is ensured to be activated in a finite time in the presence of attacks, and the proposed detector also obtains the exact system states in a given finite time in the absence of attacks.
+The obtained results are verified and illustrated in a numerical  example.
+\end{abstract}
+
+\keywords{Cyber-physical systems, descriptor systems, attack detection, finite time observer, discrete time singular systems.}
+
+% Please remove or comment out the following line if the footnote is not necessary 
+%\footnotetext{This work is supported by National Natural Science
+%Foundation (NNSF) of China under Grant 00000000.}
+\section{Introduction}
+Cyber-physical systems have comprehensive practical background in our modern society, which monitor and manage many critical large-scale infrastructures, such as transportation networks, water and gas distribution networks, power systems and smart grids \cite{Metke2010Security}, \cite{Slay2007Lessons}, \cite{Sridhar2012Cyber}. Due to the crucial role of cyber-physical systems in our daily life, the security of cyber-physical systems has been promptly addressed. Generally, there are two kinds of attacks in Cyber-physical systems, one is attacks to the infrastructure, the other is cyber attacks. Cyber-physical systems are prone to failures especially cyber attacks on the data and communication channels, thus causing breakdown of these cyber-physical systems which usually leads to great damages, for example, the Stuxnet storm reported in \cite{Langner2011Stuxnet} and breakout accident in nuclear plant in \cite{Lee2010Lessons}, power blackouts in Brazil in \cite{Conti2010The}. A malicious attacker can hijack the communication channels between the sensor, computation, and actuator components, modify the data values sent between components, and manipulate the system’s behavior \cite{Andr2012Attack}.
+
+In order to ensure proper operation of cyber-physical systems, it is necessary to design and implement security measures against attacks.  A considerable amount of research has been devoted to the analysis of  security of cyber-physical systems under attacks in the last few years. Reference \cite{A1976CV71500005} surveys fault detection techniques in dynamic systems that are related to attack detection in cyber-physical systems. In \cite{6545301}, the author models cyber-physical systems under attack by means of linear continuous time differential algebraic systems, and analyze the fundamental limitations of attack detection and identification. Thus it can be seen that attack detection is one of the most important aspect of cyber-physical security, which  provides essential guarantees to ensure system to take corrective actions and mitigate damaging behavior. There are several methods are proposed to implement attack detection. In \cite{Sundaram2011Distributed}, \cite{Pasqualetti2010Consensus} monitoring procedures are designed for the specific case of state attacks against discrete time nonsingular systems. An algorithm to detect output attacks against discrete time nonsingular systems is described and characterized in \cite{Fawzi2011Secure}. References \cite{Fawzi2012Secure} and \cite{Shoukry2016Event} provide algorithms to both detect and reconstruct the dynamic attack. Reference \cite{Ao2016Adaptive} proposes a sliding mode observer based
+method to estimate the attack to system dynamics and sensors
+separately. A sufficient and necessary condition of undetectable attacks in the presence of side initial state information is
+presented in \cite{Chen2016Dynamic}, and a detector based on observability matrix method is proposed to detect attacks in a finite steps. However, most of the existing literatures about attacks detection is specific to linear nonsingular systems \cite{Sundaram2011Distributed}, \cite{Pasqualetti2010Consensus}, \cite{Fawzi2011Secure}, \cite{Ao2016Adaptive}, \cite{Chen2016Dynamic}, but singularity is common in many real situations.  The authors of reference \cite{6545301} explores the detectability of an attack to a class of singular cyber-physical systems based on geometric control theory and proposes a Luenberger-like observer to detect the attack. However, the detection method in \cite{6545301} there still exists a disadvantage that
+ the duration of attacks detection process only ensure in asymptotic time, whereas finite time attack detection may be more practical and important.
+
+In this paper, we study the problem of attack detection of cyber-physical systems. The main features and contributions of this work can be summarized as follows:
+
+1) For the linear cyber-physical systems under attacks, we model them as a linear singular descriptor system subject to unknown inputs in the state and measurement, which can be used to describe many cases of practical cyber-physical systems, for instance, sensor networks, power networks and water networks.
+ 
+2) Inspired by some works in finite time observer \cite{Engel2002A}, \cite{5573041}, a novel attack detector that consisting of a finite time state observer, a state modifier and an attack event trigger is proposed to solve the problem of finite time attack detection for the considered linear singular cyber-physical systems under unknown attacks. Theoretical analysis shows that, the proposed observer can obtain the state of the cyber-physical systems in a prescribed finite time in the absence of attacks. And if there exists an attack, the alarm will be trigged in a finite time.
+%an attack event may be triggered in the presence of attacks. 
+Also, a sufficient condition is presented to guarantee the existence of such a detector.
+
+%We detect the detectable attacks in finite time. A novel attack detector is constructed by the presented finite time state observer, a state modifier and an attack event trigger. We map the output residue to the trigger's status to report the existence of attacks, or not, that is,  there  exists a attack  if and only if the output residue is nonzero after some timepoint. A sufficient condition is presented to guarantee the existence of such a detector. Also, the theoretical analysis shows that our proposed detector can detect any detectable attacks in a finite time.
+ %concerned with attacks detection in finite time for a class of cyber-physical systems with singularity. Inspired by \cite{Engel2002A}, \cite{Feng2009Finite}, we construct a novel finite time attack detector, which consist of a finite time state observer, a state modifier and an attack event trigger. It is shown that it not only detects any detectable attacks in a  finite time, but also obtains the exact state in a given finite time in the absence of attacks.
+  
+The rest of this paper is organized as follows. In Section \uppercase\expandafter{\romannumeral2}, we describe the system models and limitations, and present some preliminaries, . Section \uppercase\expandafter{\romannumeral3} including a finite time state observer and some useful definitionscontains our main technical results, that is, construct a novel finite time attack detector.  Section \uppercase\expandafter{\romannumeral4} gives some simulation results for a simple example to demonstrate the effectiveness of the proposed approach. The conclusion is in Section \uppercase\expandafter{\romannumeral5}.
+\section{System description and preliminaries}
+
+In this section, we model a cyber-physical system under attacks with the linear time-invariant discrete time descriptor system
+\begin{equation}\begin{split}\begin{cases}
+Ex(k+1)=Ax(k)+Bu(k)+L\eta(k)\\
+y(k)=Cx(k)+J\eta(k)
+\end{cases}\end{split}\end{equation}
+where $x(k)\in\mathbb{R}^n$ is the system state, $y(k)\in\mathbb{R}^p$ is the measurable output, $u(k)\in\mathbb{R}^m$ is the designed control input, $E\in\mathbb{R}^{n\times n}$, $A\in\mathbb{R}^{n\times n}$, $B\in\mathbb{R}^{n\times m},\ C\in\mathbb{R}^{p\times n}$ are known coefficient matrices, and the matrix $E$ is possibly singular,   $L\in\mathbb{R}^{n\times q}$, $J\in\mathbb{R}^{p\times q}$, and the input terms $L\eta(k)\text{ and }J\eta(k)$  are unknown disturbance signals describing the effect of an attack against the cyber-physical system. In particular, we use $\psi\subseteq\{1,2,\ldots,q\}$ denotes the attack set, namely, there exists a point of time $k$, such that $\eta_i(k)\neq 0$ for each $i\in\psi$, and for all $j\notin\psi$, $\eta_j(k)=0$ at all times. To describe this sparsity, we use $\eta_\psi$ to denote the attack signal, that is the subvector of $\eta$ indexed by $\psi$. Accordingly, $L_{\psi}$ and $J_{\psi}$ are the submatrices of $L$ and $J$ with columns indexed by $\psi$, thus, $L\eta(k)=L_{\psi}\eta_\psi(k)$, and $J\eta(k)=J_{\psi}\eta_\psi(k)$. Hereafter, we let $I_i\in\mathbb{R}^{i\times i}$ represents identity matrices with dimension of $i$. Since the matrix $E$ may be singular, we make the similar  assumptions to those in \cite{6545301}, that is, supposing the pair $(E,A)$ is regular and the initial state $x(0)\in \mathbb{R}^n$ is consistent.
+
+Our objective in this paper is to design an attack detector for (1), which can detect the detectable nonzero attack in a finite time. Inspired by \cite{Engel2002A}, \cite{Feng2009Finite}, we firstly give some useful preliminaries, which play an important role in subsequent design for attack detector.
+%\textit{A. Asymptotic Convergent Observer}
+\subsection{Detectable attacks}
+The following definition and lemma for undetectable attacks are needed. Let $y(x_0,u,\eta,k)$ be the output sequence generated from the initial state $x_0$ under the control signal $u(k)$ and the attack signal $\eta(k)$ with attack set $\psi$.
+\begin{definition} (\textit{Undetectable Attack}) For the linear descriptor system (1), the nonzero attack $(L_{\psi}\eta_\psi,\ J_{\psi}\eta_\psi)$ is undetectable if there exist two different initial state $x_1,\ x_2\in\mathbb{R}^n$, such that, for all $k\in\mathbb{N}$, $y(x_1,u,\eta_\psi,k)=y(x_2,u,0,k)$ holds.
+\end{definition}
+\begin{remark} Due to linearity of the system (1), the undetectable condition in above definition is equivalent to existence of nonzero initial state $x_0$, such that, for all $k\in\mathbb{N}$, $y(x_0,0,\eta_\psi,k)=0$ holds.
+\end{remark}
+\begin{lemma} (\textit{Detectability of Cyber-Physical Attacks}) For descriptor system (1) and an attack set $\psi$, the attack set $\psi$ is undetectable if and only if there exists $s\in \mathbb{C}$, $\alpha\in\mathbb{R}^{|\psi|}$, and $\beta\in\mathbb{R}^n$, with $\beta\neq 0$, where $|\psi|$ denotes the number of nonzero elements of attack set $\psi$, such that
+\begin{align}\begin{cases}
+(sE-A)\alpha-L_{\psi}\beta=0\\
+C\alpha+J_{\psi}\beta=0
+\end{cases}\end{align}
+holds.
+
+Proof see \cite{6545301}.
+\end{lemma}
+\begin{remark} It is easy to see that the nonzero attack $(L_{\psi}\eta_\psi,\ J_{\psi}\eta_\psi)$ is detectable if and only if the system of equations (2) has only a trivial solution, that is, the following rank condition holds.
+\begin{align}
+\textrm{rank}\begin{bmatrix}
+sE-A&-L_{\psi}\\C&J_{\psi}
+\end{bmatrix}=n+|\psi|\ .
+\end{align}
+\end{remark}
+
+\subsection{Finite time state observer}
+If we suppose $\eta(k)=0,\ \forall k\in\mathbb{N}$, then, the simplified form of (1) is as follows.
+\begin{equation}\begin{split}\begin{cases}
+Ex(k+1)=Ax(k)+Bu(k)\\
+y(k)=Cx(k).
+\end{cases}\end{split}\end{equation}
+The following lemma presented in \cite{5573041} is useful.
+%where $w(k)\in\mathbb{R}^n$ is the observer state, $\hat{z}(k)\in\mathbb{R}^n$ is the estimation of $x(k)$, $\hat{A},\ \hat{B},\ \hat{F}\ \text{and }\hat{D}$ are the undetermined coefficient matrices with appropriate dimensions.  We have the following lemma.
+\begin{lemma} For system (4), if there exist matrices $M,\ \hat{A},\ \hat{B},\ \hat{F}\ \text{and }\hat{D}$ with appropriate dimensions such that the following conditions hold
+
+(c1) $\hat{A}ME+\hat{B}C=MA$;
+
+(c2) $\hat{F}=MB$;
+
+(c3) $ME=I_n-\hat{D}C$;
+
+(c4) $\hat{A}$ is Hurwitz.\\
+then, the following observer
+\begin{equation}\begin{split}\begin{cases}
+w(k+1)=\hat{A}w(k)+\hat{B}y(k)+\hat{F}u(k)\\
+\hat{z}(k)=w(k)+\hat{D}y(k)
+\end{cases}\end{split}\end{equation}
+is an asymptotic convergent observer for (4), namely, $\hat{z}(k)$$\rightarrow x(k) \text{ as } k\rightarrow +\infty$.
+\end{lemma}
+The proof is similar to that in \citep{5573041}, thus omitted.
+
+Now, we present the sufficient and necessary condition that make the equations (c1-c4) valid, which is a special case of that proposed in      \citep{5573041}.
+\begin{lemma} The conditions (c1-c3) in Lemma 2 is compatible and the condition (c4) is satisfied if and only if the following rank equation holds.
+\begin{equation}
+\textrm{rank}\begin{bmatrix}
+C\\E
+\end{bmatrix}=\textrm{rank}\begin{bmatrix}
+C\\\lambda E-A
+\end{bmatrix}=n,\ \forall\lambda\in\mathbb{C},||\lambda||\geq 1.
+\end{equation}
+\end{lemma}
+For convenience of the subsequent parameter design of attack detector, we give the main proof steps, the detail see \citep{5573041}.
+\begin{proof} 
+\textit{a.\ (c1) is compatible with (c3). $\Leftrightarrow \textrm{rank}\begin{bmatrix}
+C\\E
+\end{bmatrix}=n$}.\\
+Combining (c1) and (c3) of Lemma 2, we get 
+\begin{equation}\begin{split}
+\hat{A}=A-\begin{bmatrix}
+\hat{D}&T&M
+\end{bmatrix}\begin{bmatrix}
+CA\\C\\ \bar{E}A
+\end{bmatrix}
+\end{split}\end{equation}
+where $T=\hat{B}-\hat{A}\hat{D},\ \bar{E}=E-I_n$.  This equation can be transformed further into
+\begin{equation}
+\begin{bmatrix}
+\hat{A}&\hat{D}&T&M
+\end{bmatrix}
+\Delta=\Theta
+\end{equation}
+where 
+\begin{align*}
+\Delta=\begin{bmatrix}
+I_n&0\\CA&C\\C&0\\ \bar{E}A&E
+\end{bmatrix},\ \ \Theta=\begin{bmatrix}
+A&I_n
+\end{bmatrix}
+\end{align*}
+It is easy to see that there exists a solution for matrix equation (8), that is, the conditions (c1) and (c3) in Lemma 2 are compatible  if and only if 
+\begin{equation}
+\textrm{rank}\begin{bmatrix}
+\Delta\\\Theta
+\end{bmatrix}=\textrm{rank}\begin{bmatrix}
+\Delta
+\end{bmatrix}.
+\end{equation}
+Note that the left-hand side of (9) equals to $2n$, and
+the right-hand side equals to $n+\textrm{rank}\begin{bmatrix}
+C\\E
+\end{bmatrix}$. Thus, there exists a solution for (8) if and only if
+\begin{equation}
+\textrm{rank}\begin{bmatrix}
+C\\E
+\end{bmatrix}=n.
+\end{equation}
+\textit{b. $\hat{A}$ is Hurwitz. $\Leftrightarrow \textrm{rank}\begin{bmatrix}
+C\\ \lambda E-A
+\end{bmatrix}=n.$}\\
+Under condition (10), the general solution of
+equation (8) is
+\begin{equation}
+\begin{bmatrix}
+\hat{A}&\hat{D}&T&M
+\end{bmatrix}=\Theta\Delta^++P(I-\Delta\Delta^+)
+\end{equation}
+where $\Delta^+$ is the generalized inverse matrix of $\Delta$, variable $P$ is an arbitrary matrix and $I$ is an identity matrix with appropriate dimension. Then (7) can be rewritten as
+\begin{equation}\begin{split}
+\hat{A}&=A-[\Theta\Delta^++P(I-\Delta\Delta^+)]\begin{bmatrix}
+0&0&0\\I_p&0&0\\0&I_p&0\\0&0&I_n
+\end{bmatrix}\begin{bmatrix}
+CA\\C\\ \bar{E}A
+\end{bmatrix}\\ 
+&=\Lambda-P\Gamma 
+\end{split}\end{equation}
+where 
+\[\Lambda=A-\Theta\Delta^+\begin{bmatrix}
+0\\CA\\C\\ \bar{E}A
+\end{bmatrix},\ \Gamma=(I-\Delta\Delta^+)\begin{bmatrix}
+0\\CA\\C\\ \bar{E}A
+\end{bmatrix}.\]
+There exists a matrix parameter $P$ such that $\hat{A}$ is Hurwitz, that is, all eigenvalues of $\hat{A}$ can be assigned arbitrarily if and only if
+\begin{equation}
+\textrm{rank}\begin{bmatrix}
+\lambda I_n-\Lambda\\\Gamma
+\end{bmatrix}=n,\ \forall\lambda\in\mathbb{C}, ||\lambda||\geq1.
+\end{equation}
+Note that
+\begin{align}
+\textrm{rank}&\begin{bmatrix}
+C\\\lambda E-A
+\end{bmatrix}=\textrm{rank}\begin{bmatrix}
+I_n&0\\0&C\\0&\lambda E-A\\0&0
+\end{bmatrix}-n\nonumber\\
+=\textrm{rank}&\Bigg(\begin{bmatrix}
+-I_n&0&0&0\\C&\lambda I_p&0&I_p\\0&I_p&0&0\\E&0&I_n&0
+\end{bmatrix}\begin{bmatrix}
+I_n&0\\0&C\\0&\lambda E-A\\0&0
+\end{bmatrix}\nonumber\\ &\begin{bmatrix}
+A-\lambda I_n&I_n\\I_n&0
+\end{bmatrix}\Bigg)-n\\
+=\textrm{rank}&\Xi-2n\ .\nonumber
+\end{align}
+where
+\begin{align*}
+\Xi=\begin{bmatrix}
+\lambda I_n-A&-\Theta\\\begin{bmatrix}
+0\\CA\\C\\\bar{E}A
+\end{bmatrix}&\Delta
+\end{bmatrix}.
+\end{align*}
+Consider the full column rank matrix $G_1$ and the nonsingular matrix $G_2$  as follow
+\begin{align*}
+G_1:=\begin{bmatrix}
+I_n&\Theta\Delta^+\\0&I-\Delta\Delta^+\\0&\Delta\Delta^+
+\end{bmatrix},\ G_2:=\begin{bmatrix}
+I_n&0\\-\Delta^+\begin{bmatrix}
+0\\CA\\C\\\bar{E}A
+\end{bmatrix}&I_n
+\end{bmatrix}.
+\end{align*}
+We have
+\begin{equation}\begin{split}
+\textrm{rank}\Xi &=\textrm{rank}(G_1\Xi G_2)\\&=\textrm{rank}\begin{bmatrix}
+\lambda I_n-\Lambda\\\Gamma
+\end{bmatrix}+\textrm{rank}\Delta.
+\end{split}\end{equation}
+Note that $\textrm{rank}\Delta=2n$, combine it with (14), results in
+\begin{equation}
+\textrm{rank}\begin{bmatrix}
+C\\\lambda E-A
+\end{bmatrix}=\textrm{rank}\begin{bmatrix}
+\lambda I_n-\Lambda\\\Gamma
+\end{bmatrix}=n\ .
+\end{equation}
+Therefore, condition (13) is satisfied, that is, the all eigenvalues of matrix $\hat{A}$ can be assigned arbitrarily.
+
+This completes the proof.
+\end{proof}
+%\begin{remark} Lemma 2 presents a sufficient and necessary condition that there exists an asymptotic convergent state observer (3) for system (2).  The proof of lemma 2 also provides	 the steps that determine all parameters of observer (3), as follows:
+
+%(s1) Choose matrix $P$ such that matrix $\hat{A}$ is Hurwitz;
+
+%(s2) According to (13) or (14), we can obtain $\hat{D}$, $T$ and $M$;
+
+%(s3) From condition (c2) in lemma 1, we can get $\hat{F}$, from $T=\hat{B}-\hat{A}\hat{D}$, we have $\hat{B}=T+\hat{A}\hat{D}$.
+%\end{remark}
+%\subsection{Finite time observer}
+Note that under condition (6) in Lemma 3, there must exist more than one $P$ such that $\hat{A}$ is Hurwitz. In other words, we can construct two asymptotic convergent observers for system (2), as follows
+\begin{equation}\begin{split}\begin{cases}
+w_i(k+1)=\hat{A}_iw_i(k)+\hat{B}_iy(k)+\hat{F}_iu(k)\\
+\hat{z}_i(k)=w_i(k)+\hat{D}_iy(k),  \qquad i=1, 2.
+\end{cases}\end{split}\end{equation}
+%We combine these two observers into one equation and use a delay $k_d$ to generate a new estimation $\hat{x}(k)$ by
+%\begin{equation}\begin{split}\begin{cases}
+%W(k+1)=\tilde{A}W(k)+\tilde{B}y(k)+\tilde{F}u(k)\\
+%\hat{Z}(k)=W(k)+\tilde{D}y(k)\\
+%\hat{x}(k)=H[\hat{Z}(k)-\tilde{A}^{k_d}\hat{Z}(k-k_d)]
+%\end{cases}\end{split}\end{equation}
+Let $\tilde{A}:=\begin{bmatrix}
+\hat{A}_1&0\\0&\hat{A}_2
+\end{bmatrix},\tilde{B}:=\begin{bmatrix}
+\hat{B}_1\\\hat{B}_2
+\end{bmatrix},\tilde{F}:=\begin{bmatrix}
+\hat{F}_1\\\hat{F}_2
+\end{bmatrix},\tilde{D}:=\begin{bmatrix}
+\hat{D}_1\\\hat{D}_2
+\end{bmatrix},\hat{Z}(k):=\begin{bmatrix}
+\hat{z}_1(k)\\\hat{z}_2(k)
+\end{bmatrix},W(k):=\begin{bmatrix}
+w_1(k)\\w_2(k)
+\end{bmatrix}$, the following finite time observer lemma proposed in \citep{5573041} is a key tool for our subsequent attack detector design.
+%he following lemma presented in \citep{5573041} is useful for subsequent design of detector. 
+\begin{lemma} If matrices $\hat{A}_1,\ \hat{A}_2$ and integer $k_d$ can be chosen such that 
+
+(a1)\ $\tilde{A}$ is Hurwitz;
+
+(a2)\ $\mathrm{det} \begin{bmatrix}
+N&\tilde{A}^{k_d}N
+\end{bmatrix}\neq 0,\ \text{where } N:=\begin{bmatrix}
+I_n\\I_n
+\end{bmatrix} $.\\
+Then, for system (4), the following observer
+\begin{equation}\begin{split}\begin{cases}
+W(k+1)=\tilde{A}W(k)+\tilde{B}y(k)+\tilde{F}u(k)\\
+\hat{Z}(k)=W(k)+\tilde{D}y(k)\\
+\hat{x}(k)=H[\hat{Z}(k)-\tilde{A}^{k_d}\hat{Z}(k-k_d)]
+\end{cases}\end{split}\end{equation}
+where $H=\begin{bmatrix}
+I_n&0
+\end{bmatrix}\begin{bmatrix}
+N&\tilde{A}^{k_d}N
+\end{bmatrix}^{-1}$, is able to obtain the state $x(k)$ precisely in finite time $k_d$, that is, $\hat{x}(k)= x(k)\text{ as }k\geq k_d$.
+\begin{proof}
+According to Lemma 2, we can get
+\begin{equation}
+\hat{z}_i(k+1)-x(k+1)=\hat{A}_i(\hat{z}_i(k)-x(k)),\ i=1,2.
+\end{equation}
+Then, we have
+\begin{equation}\begin{split}
+\hat{Z}(k+1)-Nx(k+1)=\tilde{A}(\hat{Z}(k)-Nx(k)).
+\end{split}\end{equation}
+Therefore
+\begin{equation}
+\hat{Z}(k)=Nx(k)+\tilde{A}^k(\hat{Z}(0)-Nx(0)),\ k\geq 0
+\end{equation}
+\begin{equation}\begin{split}
+\hat{Z}(k-k_d)=&Nx(k-k_d)\\&+\tilde{A}^{k-k_d}(\hat{Z}(0)-Nx(0)),\ k\geq k_d\ .
+\end{split}\end{equation}
+Substituting (21) and (22) into (18) leads to
+\begin{equation}\begin{split}
+\hat{x}(k)=HNx(k)-H\tilde{A}^{k_d}Nx(k-k_d)\ .
+\end{split}\end{equation}
+From the definition of $H$, yields to $HN=I_n$ and $H\tilde{A}^{k_d}N=0$, so, we have $\hat{x}(k)=x(k)$, when $k\geq k_d$.
+\end{proof}
+\end{lemma}
+\begin{remark} Under the condition (6), note that all eigenvalues of $\hat{A}_i$ can be assigned arbitrarily. If we choose $P_1$ and $P_2$ such that
+\begin{equation}
+0<|\lambda(\hat{A}_1)|_{max}<\tau<|\lambda(\hat{A}_2)|_{min}<1
+\end{equation}
+where $|\lambda(\hat{A}_1)|_{max}$ denotes the maximum modulus of all eigenvalues of $\hat{A}_1$, $|\lambda(\hat{A}_2)|_{min}$ denotes the minimum modulus of all eigenvalues of $\hat{A}_2$, and $\tau\in(0,1)$ is a constant, then, not only $\tilde{A}$ is Hurwizt, but also for all positive integers $k_d$,
+$\textrm{det}\begin{bmatrix}
+N&\tilde{A}^{k_d}N
+\end{bmatrix}\neq 0$
+ holds.
+\end{remark}
+\begin{proof}
+Obviously, $\tilde{A}$ is Hurwitz if (24) holds. On the other hand, since matrix $\hat{A}_2$ is nonsingular, we have
+\begin{equation}\begin{split}
+&\textrm{det}\begin{bmatrix}
+N&\tilde{A}^{k_d}N
+\end{bmatrix}=\textrm{det}\begin{bmatrix}
+I_n&\hat{A}^{k_d}_1\\I_n&\hat{A}^{k_d}_2
+\end{bmatrix}\\
+=&\textrm{det}\begin{bmatrix}
+I_n&0\\I_n&I_n
+\end{bmatrix}\begin{bmatrix}
+I_n&\hat{A}^{k_d}_1\\0&\hat{A}^{k_d}_2-\hat{A}^{k_d}_1
+\end{bmatrix}\\
+=&\textrm{det}(\hat{A}^{k_d}_2-\hat{A}^{k_d}_1)\\
+=&\textrm{det}(\hat{A}_2^{k_d})\textrm{det}[I_n-(\tau\hat{A}_2^{-1})^{k_d}(\tau^{-1}\hat{A}_1)^{k_d}].
+\end{split}\end{equation}
+The first determinant on the right-hand side is nonzero for all positive integers $k_d$, the second goes to $1$ as $k_d\rightarrow +\infty$. Consequently, the overall determinant does not vanish identically.  Consider the continuous form $\textrm{det}(\hat{A}_2^{t})\textrm{det}[I_n-(\tau\hat{A}_2^{-1})^{t}(\tau^{-1}\hat{A}_1)^{t}]$, note that, it is an analytic function of $t$, and $t=0$ is the isolated zero, that is, (25) is nonzero for all nonzero positive integers $k_d$. Therefore, the observer can be made to converge  within an arbitrarily short time interval in theory.
+\end{proof}
+\begin{remark}
+ Note that, the Lemma 3 not only provides a sufficient and necessary condition for the existence of an asymptotic convergent state observer (5), but also guarantee the existence of finite time observer (18) for system (4).
+\end{remark}
+\section{Finite time attack detector design}
+
+From the previous preliminaries, especially in Lemma 4, we know that observer (18) can obtain the state of system (4) in a finite time. Take advantage of this point,  
+in this section, we start to achieve our goal of constructing a finite time attack detector, which consists of a finite time state observer, a state modifier and an attack event trigger. %We first consider the finite time state observer for system (1) with the absence of attack $\eta(k)$.
+ %\textcolor{red}{ convergent functional observer by comprising two %infinite time observers and a delay d.}
+\subsection{Attack detection and theoretical analysis}
+%Now, we start to construct a finite time attack detector.\\
+\textbf{Theorem 1} For cyber-physical system (1), suppose that attack $(L_{\psi}\eta_\psi,\ J_{\psi}\eta_\psi)$ is detectable. If we choose the observer parameters to make the matrices $M_1$ and $I_p-CD_1$ are nonsingular, then, observer (18) with a state modifier:
+\begin{equation}\begin{split}\begin{cases}
+\hat{Z}(k)=N\hat{x}(k),\quad &k=k_d\\
+\hat{x}(k)=\begin{bmatrix}
+I_n&0
+\end{bmatrix}\hat{Z}(k),\quad &k> k_d
+\end{cases}\end{split}\end{equation}
+and an attack event trigger:
+\begin{equation}\begin{split}
+Alarm=\begin{cases}
+0,\qquad \text{if } r(k)=0\  \text{when } k\geq k_d\\
+1,\qquad \text{otherwise } 
+\end{cases}\end{split}\end{equation}
+is a finite time attack detector for (1), where $r(k)=C\hat{x}(k)-y(k)$, "1" denotes an alarm event corresponding to existence of an attack in (1), and "0" is not. Namely, there exists an attack signal $\eta_\psi(k)\neq 0$ which is injected into (1) at some point of times if and only if $\exists k\geq k_d$ such that $r(k)\neq 0$. In particular, if a nonzero attack is injected into system (1) at the point of time $k_a>k_d$, then, the trigger (27) is activated once $\eta_\psi(k)\neq 0$.
+\begin{proof}
+Let $e(k):=x(k)-\hat{x}(k),\ e_z(k):=\hat{Z}(k)-Nx(k)$.\\
+ \textit{(Sufficiency): $\exists k\geq k_d$ such that $r(k)\neq 0 \Rightarrow$ there exists an attack $\eta_\psi(k)\neq 0$ for some $k$.}\\
+ We resort to contradiction, suppose that there does not exist an attack, that is, $\eta_\psi(k)=0$ for all $k\in\mathbb{N}$, then, from the Lemma 4, we have $e(k_d)=x(k_d)-\hat{x}(k_d)=0$, combining with modifier (26), we get
+\begin{equation}
+e_z(k_d)=N\hat{x}(k_d)-Nx(k_d)=0.
+\end{equation}
+According to (20), we have 
+\begin{equation}
+e_z(k)=\tilde{A}^{k-k_d}e_z(k_d)=0,\ \forall k\geq k_d,
+\end{equation}
+that is, when $ k\geq k_d$
+\begin{equation}
+\hat{Z}(k)=Nx(k).
+\end{equation}
+So, $\forall k\geq k_d,\ \hat{x}(k)=x(k)$, this implies that $r(k)=Ce(k)+J_{\psi}\eta_\psi(k)=0$ for all $k\geq k_d$, this is a contradiction.\\
+\textit{(Necessity): There exists an attack $\eta_\psi(k)\neq 0$ for some point of times $\Rightarrow\exists k\geq k_d$ such that $r(k)\neq 0$}.\\
+Again, we prove it by contradiction. Suppose that there exists $\eta_\psi(k)\neq 0$, such that
+\begin{equation}
+r(k)=Ce(k)+J_{\psi}\eta_\psi(k)=0,\ \ \forall k\geq k_d.
+\end{equation}
+ We consider the dynamic of estimation $\hat{x}(k),\ k\geq k_d$, from (18) and (26) we have
+\begin{equation}\begin{split}
+\hat{x}(k+1)=&\begin{bmatrix}
+I_n&0
+\end{bmatrix}\hat{Z}(k+1)\\
+=&\begin{bmatrix}
+I_n&0
+\end{bmatrix}(\tilde{A}W(k)+\tilde{B}y(k)+\tilde{F}u(k))\\&+\hat{D}_1y(k+1)\\
+=&\begin{bmatrix}
+\hat{A}_1&0
+\end{bmatrix}(\hat{Z}(k)-\tilde{D}y(k))+\hat{B}_1y(k)\\&+\hat{F}_1u(k)+\hat{D}_1y(k+1)\\
+=&\hat{A}_1\hat{x}(k)+(\hat{B}_1-\hat{A}_1\hat{D}_1)y(k)+\hat{F}_1u(k)\\&+\hat{D}_1y(k+1).\\
+\end{split}\end{equation}
+From condition (c1) and (c3) in Lemma 2, we can get
+\begin{equation}\begin{split}
+\hat{A}_1&=A-(\hat{D}_1CA+T_1C+M_1\bar{E}A)\\
+&=A-(\hat{D}_1CA+M_1EA+T_1C-M_1A)\\
+&=M_1A-T_1C.
+ \end{split}\end{equation}
+Substituting (33) into (32), we get
+\begin{equation}\begin{split}
+\hat{x}(k+1)=&M_1A\hat{x}(k)-T_1C\hat{x}(k)+T_1y(k)\\
+&+M_1Bu(k)+\hat{D}_1y(k+1)\\
+=&M_1A\hat{x}(k)+T_1(Ce(k)+J_{\psi}\eta_\psi(k))\\&+M_1Bu(k)+\hat{D}_1y(k+1)\\
+=&M_1A\hat{x}(k)+M_1Bu(k)+\hat{D}_1y(k+1).
+\end{split}\end{equation}
+Note that $M_1E+\hat{D}_1C=I_n$, thus, (34) can be rewritten as follows.
+\begin{align}
+M_1E\hat{x}(k+1)=&M_1A\hat{x}(k)+M_1Bu(k)\nonumber\\&+\hat{D}_1(Ce(k+1)+J_{\psi}\eta_\psi(k+1))\\
+=&M_1A\hat{x}(k)+M_1Bu(k).\nonumber
+\end{align}
+Note that matrix $M_1$ can be chosen as nonsingular, thus, we have
+\begin{equation}
+E\hat{x}(k+1)=A\hat{x}(k)+Bu(k),
+\end{equation}
+together with (1), we get the dynamics of $e(k)$  as follows
+\begin{equation}
+Ee(k+1)=Ae(k)+L_{\psi}\eta_\psi(k).
+\end{equation}
+Combine this with (31), note that $\eta_\psi(k)$ satisfies definition 1, that is, there exists nonzero initial value $e(k_0),\  k_0\geq k_d$, such that, for all $k\geq k_0$, the output sequence $r(k)=0$ holds. This implies that $\eta_\psi(k)$ is an undetectable attack, it is a contradiction to our assumption that $\eta_\psi(k)$ is detectable. 
+
+Further, if $\eta_\psi(k)=0$ for all $k<k_a$, and $\eta_\psi(k_a)\neq 0$ with $k_a> k_d$, then, from Lemma 4, the presented finite time observer (18) ensures that $\hat{x}(k)=x(k)$  for all $k\in [k_d,k_a-1]$. Obviously, the residue $r(k_a-1)=Ce(k_a-1)+J_{\psi}\eta_\psi(k_a-1)=0$, then the procedure is similar to (32)-(34), we have
+\begin{align}
+M_1E\hat{x}(k_a)=&M_1A\hat{x}(k_a-1)+M_1Bu(k_a-1)\nonumber\\&+\hat{D}_1(Ce(k_a)+J_{\psi}\eta_\psi(k_a))\nonumber\\
+=&M_1(Ax(k_a-1)+Bu(k_a-1))\\
+&+\hat{D}_1(Ce(k_a)+J_{\psi}\eta_\psi(k_a))\nonumber\\
+=&M_1Ex(k_a)+\hat{D}_1(Ce(k_a)+J_{\psi}\eta_\psi(k_a))\nonumber.
+\end{align}
+With $M_1E+\hat{D}_1C=I_n$, we can get $e(k_a)+\hat{D}_1J_{\psi}\eta_\psi(k_a)=0$. 
+Note that
+\begin{equation}\begin{split}
+r(k_a)&=Ce(k_a)+J_{\psi}\eta_\psi(k_a)\\
+&=J_{\psi}\eta_\psi(k_a)-C\hat{D}_1J_{\psi}\eta_\psi(k_a)\\
+&=(I_p-C\hat{D}_1)J_{\psi}\eta_\psi(k_a).
+\end{split}\end{equation}
+Due to $J_{\psi}\eta_\psi(k_a)\neq 0$, and $I_p-C\hat{D}_1$ is a  nonsingular matrix, thus, $r(k_a)$ will be nonzero. This means the attack event trigger (27) is activated once $\eta_\psi(k)\neq 0$. 
+
+This completes the proof.
+\end{proof}
+Upon comparing with the  existing finite time attack detection methods, such as in \cite{Fawzi2012Secure}, it is seen clearly that the proposed attack detector in this paper can detect any nonzero detectable attacks in a finite time, that is, alarm (27) will report the existence of attacks at the first point of time that make $r(k)\neq 0$ starting with $k\geq k_d$. In particular, if the nonzero attack is injected into system after the point of time $k_d$, then alarm will be activated once $\eta_\psi(k)\neq 0$. Also, the exact state can be obtained in a prescribed finite time in the absence of attacks. 
+\begin{remark} Note that in the proposed method, the parameters of observer (18) can be determined based on asymptotic convergent observer (5). Meanwhile, as long as both $M_1$ and $I_p-C\hat{D}_1$  are made nonsingular, which can always be fulfilled under the conditions imposed, thus our proposed detector is ensured to work properly and satisfactorily as confirmed by the theory.
+%Our proposed detector would work perfectly as long as the observer's parameters that determined based on (29) and steps in remark 1 can ensure both $M_1$ and $I_p-C\hat{D}_1$  to be nonsingular.
+\end{remark}
+Now, we list the steps for the parameter selection for the proposed detector in Theorem 1,as follows, which is derived mainly from the proof of Lemma 3.
+
+(s1) According to equation (11), first, choose matrices $P_1$ and $P_1$ such that matrices $\hat{A}_1$ and  $\hat{A}_2$ are Hurwitz, respectively. Moreover, condition (24) need to be satisfied.
+
+(s2) Based on the $P_i$ determined in (s1), we can obtain $\hat{D}_i$, $T_i$ and $M_i,\ i=1,2$, from equation (11). Meanwhile, we need to make sure both $M_1$ and $I_p-C\hat{D}_1$ are nonsingular, if it's not, then go back to step 1, and choose $P_i$ again.
+
+(s3)From condition (c2) in lemma 1 and equation $T=\hat{B}-\hat{A}\hat{D}$, we can get $\hat{F}_i$ and $\hat{B}_i,\ i=1,2$, respectively.
+\begin{remark}
+Note that there exists such a detector for system (1) as long as there exists an observer (18). According to Lemma 4 and Lemma 2, we can note that observer (18) can be constructed as long as condition (6) is hold. That is, the existence of the proposed detector only depends on the structure of cyber-physical systems (1) and has absolutely no relation to the initial state of systems.
+\end{remark}
+
+
+\section{Numerical simulation}
+
+In this section, a numerical example is used to demonstrate and verify the effectiveness of the proposed method. Consider the discrete time descriptor system (1) with the system parameters are given by 
+\begin{align*}
+E=\begin{bmatrix}
+1&0\\0&0
+\end{bmatrix},\ 
+A=\begin{bmatrix}
+0.8&0.1\\1.5&0.9
+\end{bmatrix},\ 
+B=\begin{bmatrix}
+1\\1
+\end{bmatrix},\ 
+C=\begin{bmatrix}
+1&1\\2&1
+\end{bmatrix}.
+\end{align*}
+Obviously, $E$ is a singular matrix, and $\mathrm{det}(sE-A)$ is not identically zero, thus there exists a unique solution $x(k)$ for (1). Note that condition (6) is satisfied, so we can choose
+\begin{equation}
+\begin{split}
+P_1=\left[\begin{array}{cccc}
+-0.0328   & 0.1349  & -0.0780&0.0780\\0.1992  &  0.0976 &   0.0167&-0.0167\\ \end{array}\right.\\
+\left.\begin{array}{cccc}   -0.2540&   0.1168&  -0.0780  &  0.0061\\0.0055&  -0.0668 & 0.0167  &  0.0384\\ \end{array}\right],\nonumber \\
+P_2=\left[\begin{array}{cccc}
+0.4672 & 0.1349 & 0.0860 & -0.0860\\0.1992  & 0.5976 & -0.2326  & 0.2326\\ \end{array}\right.\\
+\left.\begin{array}{cccc}  0.1705  & -0.2226&  0.0860  &  0.0824\\-0.8325  &  0.2834 &-0.2326    &0.0797\\ \end{array}\right]\nonumber
+\end{split}
+\end{equation}
+to make $\hat{A}_1=\mathrm{diag}(0.1,0.3)$ and $\hat{A}_2=\mathrm{diag}(0.6,0.8)$ satisfy the condition (24). Then according to the parameter selection steps listed in Section 3, we can get $\hat{B}_1=[0.3003\  0.2917;0.3276\ -0.2817]$, $\hat{B}_2=[0.0014\ 0.0750;-0.1783 \  0.2364]$, $\hat{F}_1=[0.4867\ -0.7819]^\mathrm{T}$, $\hat{F}_2=[0.7265\ -0.9899]^\mathrm{T}$, $\hat{D}_1=[-0.4423\  0.4423;1.0631 \  -0.0631]$, $\hat{D}_2=[-0.2782    \ 0.2782;0.8137  \  0.1863]$, $M_1=[0.5577 \  -0.0716;\ -0.9369 \   0.1551]$, $M_2=[ 0.7218 \  0.0047;\-1.1863 \  0.1963]$. It is easy to see that $M_1$ and $I_p-C\hat{D}_1$ are nonsingular. Setting time delay factor $k_d=10$, then (18) with $\tilde{A}=\mathrm{diag}(0.1,0.3,0.6,0.8)$, $\tilde{B}=[-0.8\ 0.5\ -0.05\ -0.25]^\mathrm{T}$, $\tilde{D}=[0\ 1\ 0\ 1]^\mathrm{T}$, $\tilde{F}=[0\ -0.3333\ 0.8333\ -1.1667]^\mathrm{T}$ and
+$H=[
+1\ 0\  0 \  0;
+0\  1\  0 \  -0.0001
+]$
+is a finite time state observer for (4). 
+
+We give control input $u(t)=\sin(0.32\pi t)$ and attack signal $\eta_\psi(t)=2-e^{-0.15t}$ with $L_{\psi}=[1\ 0]^T$ and $J_{\psi}=[0\ 1]^T$, it is easy to verify that $(L_{\psi}\eta_\psi,\ J_{\psi}\eta_\psi)$ is a detectable attack for system (1) with the above parameters. Consider the system initial state value $x(0)=[1.5\  -2.5]^\mathrm{T}$ and observer initial state value $W(0)=[1\ 0\ 1 \ 0]^\mathrm{T}$, and set the sampling time $T=0.01s$. If no attacks are injected into (1), the effectiveness of observer (18) is shown in Fig.1.  
+\begin{figure}[htbp]
+\includegraphics[width=\hsize]{e1e2.pdf}
+\caption{The estimation error of observer (18) for system (1) with  no attacks}
+\end{figure}
+We can see that the state estimation error $e$ convergent to zero in no more than $0.1s$, which means observer (18) can obtain the state of system (1) with no attack in a predefined finite time.
+
+ Now, we illustrate the effectiveness of the proposed attack detector (18,26,27). The status of attack event trigger (27) are shown in Fig.2 and Fig.3.
+\begin{figure}[htbp]
+\includegraphics[width=\hsize]{alarm1.eps}
+\caption{The trajectory of trigged alarm events with $\eta(k)=0$}
+\end{figure}
+\begin{figure}[htbp]
+\includegraphics[width=\hsize]{alarmyes.eps}
+\caption{The trajectories of trigged alarm events with $\eta(k)\neq 0$}
+\end{figure}
+
+It can be observed  from Fig.2 that  if no attacks are injected into system (1) all over the time, the attack event trigger would not be activated.
+In Fig.3, we clearly see that since attack $(L_{\psi}\eta_\psi,\ J_{\psi}\eta_\psi)$ is detectable, an alarm is activated to report the existence of malicious attacks in no more than 0.1s if the nonzero attack $\eta_\psi(k)$ is injected into system (1) at the point of time before $k_d$, and if the attack $\eta_\psi(k)$ is injected at $k_a>k_d$, then an alarm is activated immediately at the point of time $k_a$. Those are consistent with Theorem 1 and verify that, our proposed attack detector can work perfectly to solve the attack detection problem in a finite time.
+
+\section{Conclusions}
+In this paper, we have formulated and studied the attack detection problem for a class of cyber-physical systems with singularity under unknown attacks. A finite time attack detector has been constructed by integrating a finite time state observer with a state modifier and an attack events trigger. Theoretical analysis shows that the proposed detector can detect unknown attacks to the cyber-physical system (1) in a finite time. Finally, the effectiveness of the presented method was illustrated by using a numerical example.
+
+\bibliographystyle{unsrt}
+\bibliography{ref}
+\end{document}
