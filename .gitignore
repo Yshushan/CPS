@@ -2,3 +2,4 @@
 !*.tex
 !*.bib
 !.gitignore
+!*.eps
